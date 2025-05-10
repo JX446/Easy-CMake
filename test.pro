@@ -10,11 +10,13 @@ CONFIG += c++17
 
 SOURCES += \
     checkablefilesystemmodel.cpp \
+    cmakegenerator.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     checkablefilesystemmodel.h \
+    cmakegenerator.h \
     mainwindow.h
 
 FORMS += \

@@ -25,7 +25,7 @@ public:
 
 private slots:
 
-    void on_dirbrowseButton_clicked();
+    void handle_dirbrowseButton_clicked();
     void read_files(const QString &rootPath);
 
 private:
