@@ -12,12 +12,14 @@ SOURCES += \
     checkablefilesystemmodel.cpp \
     cmakegenerator.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mytreeview.cpp
 
 HEADERS += \
     checkablefilesystemmodel.h \
     cmakegenerator.h \
-    mainwindow.h
+    mainwindow.h \
+    mytreeview.h
 
 FORMS += \
     mainwindow.ui

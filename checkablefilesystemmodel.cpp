@@ -31,16 +31,37 @@ bool CheckableFileSystemModel::setData(const QModelIndex &index, const QVariant 
         // 更新当前项的勾选状态
         checkStates[path] = newState;
 
+        // 如果当前状态是unchecked，则递归查找父目录，确保父目录也是unchecked
+        if (newState == Qt::Unchecked) {
+            QModelIndex parentIndex = index.parent();
+            while (parentIndex.isValid() && filePath(parentIndex) != rootPath()) {
+                QString parentPath = filePath(parentIndex);
+                // 如果父目录是 checked 状态，则更新为 unchecked
+                if (checkStates[parentPath] == Qt::Checked) {
+                    checkStates[parentPath] = Qt::Unchecked;
+                    emit dataChanged(parentIndex, parentIndex);
+                }
+                parentIndex = parentIndex.parent();  // 向上递归至父目录
+            }
+        }
+
         // 如果是目录，递归勾选其所有子项
         if (isDir(index)) {
             // 提前加载目录
             fetchMore(index);
-            QTimer::singleShot(10, this, [=]() {
+            QTimer::singleShot(5, this, [=]() {
                 recursivelyCheckChildren(index, newState);
             });
         }
 
         emit dataChanged(index, index);
+        QTimer::singleShot(10, this, [=]() {
+            for (auto it = checkStates.constBegin(); it != checkStates.constEnd(); ++it) {
+                qDebug().noquote().nospace() << QString("%1 : %2")
+                .arg(it.key(), -30)
+                    .arg(it.value() == Qt::Checked ? "Checked" : "Unchecked");
+            }
+        });
         return true;
     }
 
@@ -49,19 +70,23 @@ bool CheckableFileSystemModel::setData(const QModelIndex &index, const QVariant 
 
 // 递归实现
 void CheckableFileSystemModel::recursivelyCheckChildren(const QModelIndex &parent, Qt::CheckState state) {
+    checkStates[filePath(parent)] = state;
     int childCount = rowCount(parent);
     for (int i = 0; i < childCount; ++i) {
         QModelIndex childIndex = this->index(i, 0, parent);
         QString childPath = filePath(childIndex);
-
-        checkStates[childPath] = state;
-        emit dataChanged(childIndex, childIndex);
+        if (childPath.endsWith(".cpp") || childPath.endsWith(".c") ||
+            childPath.endsWith(".h")   || childPath.endsWith(".hpp")) {
+            // qDebug() << "child";
+            checkStates[childPath] = state;
+            emit dataChanged(childIndex, childIndex);
+        }
 
         // 如果子项本身是目录，也递归处理
         if (isDir(childIndex)) {
             // 提前加载目录
             fetchMore(childIndex);
-            QTimer::singleShot(10, this, [=]() {
+            QTimer::singleShot(5, this, [=]() {
                 recursivelyCheckChildren(childIndex, state);
             });
         }
@@ -78,3 +103,4 @@ QStringList CheckableFileSystemModel::getCheckedFiles() const {
     }
     return selected;
 }
+

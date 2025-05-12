@@ -15,6 +15,10 @@ void CMakeGenerator::setProjectPath(const QString &path) {
     projectPath = path;
 }
 
+void CMakeGenerator::setVersionRequired(const QString &version) {
+    VersionRequired = version;
+}
+
 QStringList CMakeGenerator::collectSourceFiles() const {
     QStringList result;
     QDir dir(projectPath);
@@ -33,7 +37,7 @@ QStringList CMakeGenerator::collectSourceFiles() const {
 QString CMakeGenerator::generateCMakeContent(const QStringList &sources) const {
     QStringList lines;
 
-    lines << "cmake_minimum_required(VERSION 3.14)";
+    lines << QString("cmake_minimum_required(VERSION %1)").arg(VersionRequired);
     lines << QString("project(%1 LANGUAGES CXX)").arg(projectName);
     lines << "";
     lines << "set(CMAKE_CXX_STANDARD 17)";

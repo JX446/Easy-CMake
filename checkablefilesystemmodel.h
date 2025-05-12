@@ -4,6 +4,7 @@
 #include <QFileSystemModel>
 #include <QHash>
 #include <QStringList>
+#include <QDebug>
 
 class CheckableFileSystemModel : public QFileSystemModel {
     Q_OBJECT

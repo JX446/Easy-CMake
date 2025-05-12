@@ -23,12 +23,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private:
+    Ui::MainWindow *ui;
+
 private slots:
 
     void handle_dirbrowseButton_clicked();
-    void read_files(const QString &rootPath);
 
-private:
-    Ui::MainWindow *ui;
+signals:
+    void directorySelected(const QString &path);
 };
 #endif // MAINWINDOW_H
