@@ -19,6 +19,8 @@ void MyTreeView::dragEnterEvent(QDragEnterEvent *event) {
         qDebug() << "mimeData URLs:" << event->mimeData()->urls();
         qDebug() << "Has URLs!";
         event->acceptProposedAction();  // 允许进入
+    } else {
+        event->ignore();
     }
 }
 

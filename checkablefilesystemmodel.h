@@ -21,6 +21,10 @@ public:
 private:
     // 文件勾选状态
     QHash<QString, Qt::CheckState> checkStates;
+
+signals:
+    // 将获取的文件列表发送给cmakegenerator
+    void fileSelected(const QStringList files);
 };
 
 #endif // CHECKABLEFILESYSTEMMODEL_H

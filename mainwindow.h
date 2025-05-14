@@ -29,6 +29,8 @@ private:
 private slots:
 
     void handle_dirbrowseButton_clicked();
+    void handle_genButton_clicked();
+    bool handle_saveButton_clicked();
 
 signals:
     void directorySelected(const QString &path);

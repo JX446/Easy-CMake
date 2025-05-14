@@ -104,3 +104,5 @@ QStringList CheckableFileSystemModel::getCheckedFiles() const {
     return selected;
 }
 
+
+
