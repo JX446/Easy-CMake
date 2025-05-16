@@ -8,6 +8,8 @@
 #include <QDirIterator>
 #include <QDebug>
 #include <QFileSystemModel>
+#include <QIcon>
+#include "cmakegenerator.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,12 +27,17 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    std::unique_ptr<CMakeGenerator> generator;
 
 private slots:
 
     void handle_dirbrowseButton_clicked();
     void handle_genButton_clicked();
     bool handle_saveButton_clicked();
+    void handle_clearButton_clicked();
+
+    void handle_projectnamepushButton_clicked();
+    void handle_minimumversionpushButton_clicked();
 
 signals:
     void directorySelected(const QString &path);

@@ -40,6 +40,8 @@ void MyTreeView::dropEvent(QDropEvent *event) {
 
 void MyTreeView::loadDirectory(const QString &path) {
     model->setRootPath(path);
+    model->setHeaderData(0, Qt::Horizontal, path);
+
     this->setModel(model);
     this->setRootIndex(model->index(path));
 

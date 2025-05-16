@@ -104,5 +104,14 @@ QStringList CheckableFileSystemModel::getCheckedFiles() const {
     return selected;
 }
 
+// 重写获取headerdata逻辑
+QVariant CheckableFileSystemModel::headerData(int section, Qt::Orientation orientation, int role) const {
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
+        if (section == 0) {
+            return QFileInfo(this->rootPath()).fileName();  // 假设你存了这个路径名
+        }
+    }
+    return QFileSystemModel::headerData(section, orientation, role);
+}
 
 
