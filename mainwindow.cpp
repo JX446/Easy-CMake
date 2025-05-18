@@ -19,7 +19,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->clearButton, &QPushButton::clicked, this, &MainWindow::handle_clearButton_clicked);
     connect(this, &MainWindow::directorySelected, ui->dirtreeView, &MyTreeView::loadDirectory);
     connect(ui->projectnamepushButton, &QPushButton::clicked, this, &MainWindow::handle_projectnamepushButton_clicked);
+    connect(ui->exefilenamepushButton, &QPushButton::clicked, this, &MainWindow::handle_exefilenamepushButton_clicked);
     connect(ui->minimumversionpushButton, &QPushButton::clicked, this, &MainWindow::handle_minimumversionpushButton_clicked);
+    connect(ui->cxxversionpushButton, &QPushButton::clicked, this, &MainWindow::handle_cxxversionpushButton_clicked);
+    connect(ui->exefilescopepushButton, &QPushButton::clicked, this, &MainWindow::handle_exefilescopepushButton_clicked);
 }
 
 // 主析构函数
@@ -82,17 +85,41 @@ void MainWindow::handle_clearButton_clicked()
 }
 
 
-// 项目名称输入确认
+// 项目名称输入按钮
 void MainWindow::handle_projectnamepushButton_clicked()
 {
     QString projectname = ui->projectnamelineEdit->text();
     generator->setProjectName(projectname);
 }
 
-
+// 最小版本要求按钮
 void MainWindow::handle_minimumversionpushButton_clicked()
 {
     QString minimum_version = ui->minumumversionlineEdit->text();
     generator->setVersionRequired(minimum_version);
+}
+
+
+// 可执行文件名称按钮
+void MainWindow::handle_exefilenamepushButton_clicked()
+{
+    QString exefilename = ui->exefilenamelineEdit->text();
+    generator->setExefileName(exefilename);
+}
+
+
+void MainWindow::handle_exefilescopepushButton_clicked()
+{
+    QString exefilescope = ui->exefilescopecomboBox->currentText();
+    generator->setExefileScope(exefilescope);
+}
+
+
+void MainWindow::handle_cxxversionpushButton_clicked()
+{
+    QString cxxversion = ui->cxxversioncomboBox->currentText();
+    bool cxxversionoption = ui->cxxversionoptioncomboBox->currentText() == "ENFORCED"? true : false;
+    generator->setCxxversionReqired(cxxversion);
+    generator->setCxxversionoption(cxxversionoption);
 }
 
