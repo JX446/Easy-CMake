@@ -35,9 +35,11 @@ private slots:
     void handle_genButton_clicked();
     bool handle_saveButton_clicked();
     void handle_clearButton_clicked();
-
     void handle_projectnamepushButton_clicked();
     void handle_minimumversionpushButton_clicked();
+    void handle_exefilenamepushButton_clicked();
+    void handle_exefilescopepushButton_clicked();
+    void handle_cxxversionpushButton_clicked();
 
 signals:
     void directorySelected(const QString &path);

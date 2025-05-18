@@ -11,12 +11,28 @@ void CMakeGenerator::setProjectName(const QString &name) {
     m_projectName = name;
 }
 
+void CMakeGenerator::setExefileName(const QString &exefilename) {
+    m_exefilename = exefilename;
+}
+
 void CMakeGenerator::setProjectPath(const QString &path) {
     m_projectPath = path;
 }
 
 void CMakeGenerator::setVersionRequired(const QString &version) {
     m_versionRequired = version;
+}
+
+void CMakeGenerator::setCxxversionReqired(const QString &CXXversion) {
+    m_cxxversion = CXXversion;
+}
+
+void CMakeGenerator::setCxxversionoption(const bool &option) {
+    m_cxxversion_option = option;
+}
+
+void CMakeGenerator::setExefileScope(const QString &scope) {
+    m_exefilescope = scope;
 }
 
 QString CMakeGenerator::collectSourceFiles(const QStringList &files) const {
@@ -41,7 +57,7 @@ QString CMakeGenerator::collectSourceFiles(const QStringList &files) const {
                 }
             }
 
-            result << QString(" %1").arg(file);
+            result << QString("    %1").arg(file);
         }
     }
 
@@ -54,8 +70,10 @@ QString CMakeGenerator::generateCMakeContent(const QStringList &files) const {
 
     lines << QString("cmake_minimum_required(VERSION %1)").arg(m_versionRequired) + "\n";
     lines << QString("project(%1 LANGUAGES CXX)").arg(m_projectName) + "\n";
-    lines << "set(CMAKE_CXX_STANDARD 17)\n";
-    lines << "set(CMAKE_CXX_STANDARD_REQUIRED ON)\n";
+    lines << QString("set(CMAKE_CXX_STANDARD %1)").arg(m_cxxversion) + "\n";
+    if (m_cxxversion_option) {
+        lines << "set(CMAKE_CXX_STANDARD_REQUIRED ON)\n";
+    }
     lines << "set(CMAKE_AUTOMOC ON)\n";
     lines << "set(CMAKE_AUTOUIC ON)\n";
     lines << "set(CMAKE_AUTORCC ON)\n";
@@ -64,8 +82,9 @@ QString CMakeGenerator::generateCMakeContent(const QStringList &files) const {
     // 假设 collectSourceFiles 返回的是 QStringList
     QString result = collectSourceFiles(files);
     lines << result;  // 将 QStringList 合并为一个字符串并加入到 lines 中
-    lines << "add_executable(${PROJECT_NAME} ${SOURCES})\n";
-    lines << "target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Gui Qt6::Widgets)";
+    lines << QString("add_executable(%1 ${SOURCES})").arg(m_exefilename) + "\n";
+    lines << QString("target_compile_options(%1 %2 -Wall -g)").arg(m_exefilename, m_exefilescope) + "\n";
+    lines << QString("target_link_libraries(%1 todo)").arg(m_exefilename) + "\n";
 
     // 将返回结果从qstringlist变成qstring
     return lines.join("\n");
