@@ -39,6 +39,7 @@ private slots:
     void handle_minimumversionpushButton_clicked();
     void handle_exefilenamepushButton_clicked();
     void handle_exefilescopepushButton_clicked();
+    void handle_exefileoutputpushButton_clicked();
     void handle_cxxversionpushButton_clicked();
 
 signals:
