@@ -1,1 +1,1 @@
-test
+快速生成Cmakelists.txt的GUI程序

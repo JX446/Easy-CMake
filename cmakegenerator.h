@@ -15,9 +15,12 @@ public:
     void setProjectPath(const QString &path);
     void setExefileName(const QString &exefilename);
     void setExefileScope(const QString &scope);
+    void setExefileOutput(const QString &exefileoutput);
     void setVersionRequired(const QString &Version);
     void setCxxversionReqired(const QString &CXXversion);
     void setCxxversionoption(const bool &option);
+
+
     QString generateCMakeContent(const QStringList &files) const;
     bool generate(const QString &cmakecontent);
 
@@ -31,6 +34,7 @@ private:
     QString m_cxxversion = "14";
     bool m_cxxversion_option = true;
     QStringList m_sources;
+    QString m_exefileoutput = "{CMAKE_CURRENT_SOURCE_DIR}/build";
 
     QString collectSourceFiles(const QStringList &files) const;
 };

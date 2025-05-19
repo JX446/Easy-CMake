@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->minimumversionpushButton, &QPushButton::clicked, this, &MainWindow::handle_minimumversionpushButton_clicked);
     connect(ui->cxxversionpushButton, &QPushButton::clicked, this, &MainWindow::handle_cxxversionpushButton_clicked);
     connect(ui->exefilescopepushButton, &QPushButton::clicked, this, &MainWindow::handle_exefilescopepushButton_clicked);
+    connect(ui->exefileoutputpushButton, &QPushButton::clicked, this, &MainWindow::handle_exefileoutputpushButton_clicked);
 }
 
 // 主析构函数
@@ -107,14 +108,22 @@ void MainWindow::handle_exefilenamepushButton_clicked()
     generator->setExefileName(exefilename);
 }
 
-
+// 可执行文件作用域按钮
 void MainWindow::handle_exefilescopepushButton_clicked()
 {
     QString exefilescope = ui->exefilescopecomboBox->currentText();
     generator->setExefileScope(exefilescope);
 }
 
+// 可执行文件输出路径按钮
+void MainWindow::handle_exefileoutputpushButton_clicked() {
+    QString dir = QFileDialog::getExistingDirectory(this, "选择一个目录", QString("%1").arg(ui->showdirlineEdit->text()));
+    ui->exefileoutputlineEdit->setText(dir);
+    generator->setExefileOutput(dir);
 
+}
+
+// C++语言版本要求按钮
 void MainWindow::handle_cxxversionpushButton_clicked()
 {
     QString cxxversion = ui->cxxversioncomboBox->currentText();

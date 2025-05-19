@@ -35,6 +35,10 @@ void CMakeGenerator::setExefileScope(const QString &scope) {
     m_exefilescope = scope;
 }
 
+void CMakeGenerator::setExefileOutput(const QString &exefileoutput) {
+    m_exefileoutput = exefileoutput;
+}
+
 QString CMakeGenerator::collectSourceFiles(const QStringList &files) const {
     qDebug() << "rootpath:" << m_projectPath;
     QStringList result;
@@ -68,9 +72,9 @@ QString CMakeGenerator::collectSourceFiles(const QStringList &files) const {
 QString CMakeGenerator::generateCMakeContent(const QStringList &files) const {
     QStringList lines;
 
-    lines << QString("cmake_minimum_required(VERSION %1)").arg(m_versionRequired) + "\n";
-    lines << QString("project(%1 LANGUAGES CXX)").arg(m_projectName) + "\n";
-    lines << QString("set(CMAKE_CXX_STANDARD %1)").arg(m_cxxversion) + "\n";
+    lines << QString("cmake_minimum_required(VERSION %1)\n").arg(m_versionRequired);
+    lines << QString("project(%1 LANGUAGES CXX)\n").arg(m_projectName);
+    lines << QString("set(CMAKE_CXX_STANDARD %1)\n").arg(m_cxxversion);
     if (m_cxxversion_option) {
         lines << "set(CMAKE_CXX_STANDARD_REQUIRED ON)\n";
     }
@@ -82,9 +86,10 @@ QString CMakeGenerator::generateCMakeContent(const QStringList &files) const {
     // 假设 collectSourceFiles 返回的是 QStringList
     QString result = collectSourceFiles(files);
     lines << result;  // 将 QStringList 合并为一个字符串并加入到 lines 中
-    lines << QString("add_executable(%1 ${SOURCES})").arg(m_exefilename) + "\n";
-    lines << QString("target_compile_options(%1 %2 -Wall -g)").arg(m_exefilename, m_exefilescope) + "\n";
-    lines << QString("target_link_libraries(%1 todo)").arg(m_exefilename) + "\n";
+    lines << QString("add_executable(%1 ${SOURCES})\n").arg(m_exefilename);
+    lines << QString("target_compile_options(%1 %2 -Wall -g)\n").arg(m_exefilename, m_exefilescope);
+    lines << QString("target_link_libraries(%1 todo)\n").arg(m_exefilename);
+    lines << QString("(set(EXECUTABLE_OUTPUT_PATH %1)\n").arg(m_exefileoutput);
 
     // 将返回结果从qstringlist变成qstring
     return lines.join("\n");
