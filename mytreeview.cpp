@@ -28,7 +28,7 @@ void MyTreeView::dropEvent(QDropEvent *event) {
     qDebug() << "dropEvent triggered";
     QString path = event->mimeData()->urls().first().toLocalFile();
 
-    // 拖拽时再绑定文件模型，实现初始时窗口为空
+    // 拖拽时再绑定文件模型，实现初始时窗口为空的效果
     model->setRootPath(path);
     this->setModel(model);
     this->setRootIndex(model->index(path));   // 文件模型和视图控件模型都需设置根目录
