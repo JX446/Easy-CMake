@@ -31,18 +31,19 @@ private:
 
 private slots:
 
-    void handle_dirbrowseButton_clicked();
+    void handle_dirBrowseButton_clicked();
     void handle_genButton_clicked();
     bool handle_saveButton_clicked();
     void handle_clearButton_clicked();
-    void handle_projectnamepushButton_clicked();
-    void handle_minimumversionpushButton_clicked();
-    void handle_exefilenamepushButton_clicked();
-    void handle_exefilescopepushButton_clicked();
-    void handle_exefileoutputpushButton_clicked();
-    void handle_cxxversionpushButton_clicked();
+    void handle_projectNamePushButton_clicked();
+    void handle_minimumVersionPushButton_clicked();
+    void handle_exeFilenamePushButton_clicked();
+    void handle_exeFileScopePushButton_clicked();
+    void handle_exeFileOutputPushButton_clicked();
+    void handle_cxxVersionPushButton_clicked();
+    void handle_outputFileTypeOptionPushButton_clicked();
 
 signals:
-    void directorySelected(const QString &path);
+    void directorySelect(const QString &path);
 };
 #endif // MAINWINDOW_H

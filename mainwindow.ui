@@ -46,14 +46,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="showdirlineEdit">
+       <widget class="QLineEdit" name="showDirlineEdit">
         <property name="readOnly">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="dirbrowseButton">
+       <widget class="QPushButton" name="dirBrowseButton">
         <property name="text">
          <string>浏览目录</string>
         </property>
@@ -109,7 +109,7 @@
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QPlainTextEdit" name="cmakeplainTextEdit">
+        <widget class="QPlainTextEdit" name="cmakePlainTextEdit">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -175,7 +175,7 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>14</width>
-              <height>115</height>
+              <height>102</height>
              </size>
             </property>
            </spacer>
@@ -203,15 +203,15 @@
                <enum>QFrame::Shadow::Plain</enum>
               </property>
               <property name="text">
-               <string>项目名称(ProjecName):</string>
+               <string>项目名称:</string>
               </property>
               <property name="wordWrap">
                <bool>false</bool>
               </property>
              </widget>
             </item>
-            <item row="0" column="1" colspan="2">
-             <widget class="QLineEdit" name="projectnamelineEdit">
+            <item row="0" column="2" colspan="2">
+             <widget class="QLineEdit" name="projectNameLineEdit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -229,8 +229,8 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="3">
-             <widget class="QPushButton" name="projectnamepushButton">
+            <item row="0" column="4">
+             <widget class="QPushButton" name="projectNamePushButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -251,7 +251,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item row="1" column="0" colspan="2">
              <widget class="QLabel" name="label_3">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -272,15 +272,15 @@
                <enum>QFrame::Shadow::Plain</enum>
               </property>
               <property name="text">
-               <string>最小版本(minimum_version):</string>
+               <string>最小CMake版本:</string>
               </property>
               <property name="wordWrap">
                <bool>false</bool>
               </property>
              </widget>
             </item>
-            <item row="1" column="1" colspan="2">
-             <widget class="QLineEdit" name="minumumversionlineEdit">
+            <item row="1" column="2" colspan="2">
+             <widget class="QLineEdit" name="minimumVersionLineEdit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -298,8 +298,8 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="3">
-             <widget class="QPushButton" name="minimumversionpushButton">
+            <item row="1" column="4">
+             <widget class="QPushButton" name="minimumVersionPushButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -341,15 +341,15 @@
                <enum>QFrame::Shadow::Plain</enum>
               </property>
               <property name="text">
-               <string>最小CXX标准:</string>
+               <string>最小C++版本:</string>
               </property>
               <property name="wordWrap">
                <bool>false</bool>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="QComboBox" name="cxxversioncomboBox">
+            <item row="2" column="2">
+             <widget class="QComboBox" name="cxxVersionComboBox">
               <property name="currentIndex">
                <number>2</number>
               </property>
@@ -385,8 +385,8 @@
               </item>
              </widget>
             </item>
-            <item row="2" column="2">
-             <widget class="QComboBox" name="cxxversionoptioncomboBox">
+            <item row="2" column="3">
+             <widget class="QComboBox" name="cxxVersionOptionComboBox">
               <item>
                <property name="text">
                 <string>ENFORCED</string>
@@ -399,8 +399,8 @@
               </item>
              </widget>
             </item>
-            <item row="2" column="3">
-             <widget class="QPushButton" name="cxxversionpushButton">
+            <item row="2" column="4">
+             <widget class="QPushButton" name="cxxVersionPushButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -442,15 +442,15 @@
                <enum>QFrame::Shadow::Plain</enum>
               </property>
               <property name="text">
-               <string>可执行文件名称:</string>
+               <string>生成文件名称:</string>
               </property>
               <property name="wordWrap">
                <bool>false</bool>
               </property>
              </widget>
             </item>
-            <item row="3" column="1" colspan="2">
-             <widget class="QLineEdit" name="exefilenamelineEdit">
+            <item row="3" column="2" colspan="2">
+             <widget class="QLineEdit" name="outputFileNameLineEdit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -464,12 +464,12 @@
                </size>
               </property>
               <property name="text">
-               <string>default_exefilename</string>
+               <string>default_outputfilename</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="3">
-             <widget class="QPushButton" name="exefilenamepushButton">
+            <item row="3" column="4">
+             <widget class="QPushButton" name="outputFileNamePushButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -518,8 +518,27 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="3">
-             <widget class="QPushButton" name="exefilescopepushButton">
+            <item row="4" column="2">
+             <widget class="QComboBox" name="exeFileScopeComboBox">
+              <item>
+               <property name="text">
+                <string>PRIVATE</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>INTERFACE</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>PUBLIC</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="4" column="4">
+             <widget class="QPushButton" name="exeFileScopePushButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -541,6 +560,44 @@
              </widget>
             </item>
             <item row="5" column="0">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>生成文件类型：</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="2" rowspan="2" colspan="2">
+             <widget class="QComboBox" name="outputFileTypeOptionComboBox">
+              <item>
+               <property name="text">
+                <string>ExeFile</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>StaticLib</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DynamicLib</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>InterfaceLib</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="5" column="4">
+             <widget class="QPushButton" name="outputFileTypeOptionPushButton">
+              <property name="text">
+               <string>确认</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0" rowspan="2">
              <widget class="QLabel" name="label_5">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -561,15 +618,15 @@
                <enum>QFrame::Shadow::Plain</enum>
               </property>
               <property name="text">
-               <string>可执行文件输出路径:</string>
+               <string>生成文件输出路径:</string>
               </property>
               <property name="wordWrap">
                <bool>false</bool>
               </property>
              </widget>
             </item>
-            <item row="5" column="1" colspan="2">
-             <widget class="QLineEdit" name="exefileoutputlineEdit">
+            <item row="7" column="1" colspan="3">
+             <widget class="QLineEdit" name="outputFileOutputLineEdit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -582,13 +639,13 @@
                 <height>0</height>
                </size>
               </property>
-              <property name="text">
-               <string/>
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="5" column="3">
-             <widget class="QPushButton" name="exefileoutputpushButton">
+            <item row="7" column="4">
+             <widget class="QPushButton" name="outputFileOutputPushButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -609,25 +666,6 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="1" colspan="2">
-             <widget class="QComboBox" name="exefilescopecomboBox">
-              <item>
-               <property name="text">
-                <string>PRIVATE</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>INTERFACE</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>PUBLIC</string>
-               </property>
-              </item>
-             </widget>
-            </item>
            </layout>
           </item>
           <item>
@@ -638,7 +676,7 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>14</width>
-              <height>116</height>
+              <height>103</height>
              </size>
             </property>
            </spacer>
@@ -732,11 +770,11 @@
  </customwidgets>
  <tabstops>
   <tabstop>dirtreeView</tabstop>
-  <tabstop>showdirlineEdit</tabstop>
+  <tabstop>showDirlineEdit</tabstop>
   <tabstop>genButton</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>clearButton</tabstop>
-  <tabstop>cmakeplainTextEdit</tabstop>
+  <tabstop>cmakePlainTextEdit</tabstop>
  </tabstops>
  <resources/>
  <connections/>
