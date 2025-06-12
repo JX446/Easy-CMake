@@ -28,6 +28,7 @@ public:
 private:
     Ui::MainWindow *ui;
     std::unique_ptr<CMakeGenerator> generator;
+    void updateGeneratorSettings();
 
 private slots:
 
@@ -35,13 +36,8 @@ private slots:
     void handle_genButton_clicked();
     bool handle_saveButton_clicked();
     void handle_clearButton_clicked();
-    void handle_projectNamePushButton_clicked();
-    void handle_minimumVersionPushButton_clicked();
-    void handle_exeFilenamePushButton_clicked();
-    void handle_exeFileScopePushButton_clicked();
-    void handle_exeFileOutputPushButton_clicked();
-    void handle_cxxVersionPushButton_clicked();
-    void handle_outputFileTypeOptionPushButton_clicked();
+    void handle_outputFileDirPushButton_clicked();
+
 
 signals:
     void directorySelect(const QString &path);
