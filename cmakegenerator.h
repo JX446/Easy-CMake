@@ -20,6 +20,7 @@ public:
     void setCxxVersionRequired(const QString &CXXversion);
     void setCxxVersionOption(bool option);
     void setOutputFileType(const QString &outputFileType);
+    void setMacroList(const QStringList &marcoList);
 
     QString generateCMakeContent(const QStringList &files) const;
     bool generate(const QString &cmakecontent);
@@ -34,6 +35,7 @@ private:
     QString m_cxxVersion = "14";
     QString m_exeFileOutput = "${CMAKE_CURRENT_SOURCE_DIR}/build";
     QString m_outputFileType = "ExeFile";
+    QStringList m_macroList;
     bool m_cxxVersion_option = true;
 
     QString collectSourceFiles(const QStringList &files) const;

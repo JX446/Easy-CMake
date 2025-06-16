@@ -43,6 +43,10 @@ void CMakeGenerator::setOutputFileType(const QString &outputFileType) {
     m_outputFileType = outputFileType;
 }
 
+void CMakeGenerator::setMacroList(const QStringList &macroList) {
+    m_macroList = macroList;
+}
+
 // 收集源文件
 QString CMakeGenerator::collectSourceFiles(const QStringList &files) const {
     qDebug() << "rootpath:" << m_projectPath;
@@ -115,6 +119,12 @@ QString CMakeGenerator::generateCMakeContent(const QStringList &files) const {
         lines << "set(CMAKE_CXX_STANDARD_REQUIRED ON)\n";
     }
 
+    if (!m_macroList.isEmpty()) {
+        for (int i = 0; i < m_macroList.count(); ++i) {
+            QString marco = m_macroList.at(i);
+            lines << QString("add_definitions(-D%1)\n").arg(marco);
+        }
+    }
     // lines << "set(CMAKE_AUTOMOC ON)\n";
     // lines << "set(CMAKE_AUTOUIC ON)\n";
     // lines << "set(CMAKE_AUTORCC ON)\n";

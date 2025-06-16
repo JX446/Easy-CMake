@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>668</width>
-    <height>476</height>
+    <width>1456</width>
+    <height>1008</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="sizeConstraint">
@@ -156,8 +156,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>448</width>
-           <height>393</height>
+           <width>473</width>
+           <height>903</height>
           </rect>
          </property>
          <property name="sizePolicy">
@@ -166,18 +166,21 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
+           <layout class="QVBoxLayout" name="verticalLayout">
             <item>
              <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Orientation::Vertical</enum>
               </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Policy::Expanding</enum>
+              </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>14</width>
-                <height>102</height>
+                <height>74</height>
                </size>
               </property>
              </spacer>
@@ -212,7 +215,7 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="1" colspan="3">
+              <item row="0" column="1" colspan="2">
                <widget class="QLineEdit" name="projectNameLineEdit">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -259,7 +262,7 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="1" colspan="3">
+              <item row="1" column="1" colspan="2">
                <widget class="QLineEdit" name="minimumVersionLineEdit">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -349,7 +352,7 @@
                 </item>
                </widget>
               </item>
-              <item row="2" column="2" colspan="2">
+              <item row="2" column="2">
                <widget class="QComboBox" name="cxxVersionOptionComboBox">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -397,7 +400,7 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="1" colspan="3">
+              <item row="3" column="1" colspan="2">
                <widget class="QLineEdit" name="outputFileNameLineEdit">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -444,7 +447,7 @@
                 </property>
                </widget>
               </item>
-              <item row="4" column="1" colspan="3">
+              <item row="4" column="1">
                <widget class="QComboBox" name="exeFileScopeComboBox">
                 <item>
                  <property name="text">
@@ -465,12 +468,24 @@
               </item>
               <item row="5" column="0">
                <widget class="QLabel" name="label_12">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>12</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>生成文件类型：</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1" colspan="3">
+              <item row="5" column="1">
                <widget class="QComboBox" name="outputFileTypeOptionComboBox">
                 <item>
                  <property name="text">
@@ -537,7 +552,7 @@
                  </size>
                 </property>
                 <property name="toolTipDuration">
-                 <number>-1</number>
+                 <number>0</number>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
@@ -566,6 +581,67 @@
                 </property>
                </widget>
               </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="label_6">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>12</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>自定义宏:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1" colspan="2">
+               <widget class="QLineEdit" name="addMacroLineEdit"/>
+              </item>
+              <item row="7" column="3">
+               <widget class="QPushButton" name="addMacroPushButton">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>添加</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1" colspan="2">
+               <widget class="QListWidget" name="macroListWidget">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>21</height>
+                 </size>
+                </property>
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="3">
+               <widget class="QPushButton" name="deleteMacroPushButton">
+                <property name="text">
+                 <string>删除</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
             <item>
@@ -575,8 +651,8 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>14</width>
-                <height>103</height>
+                <width>20</width>
+                <height>100</height>
                </size>
               </property>
              </spacer>
@@ -651,8 +727,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>668</width>
-     <height>18</height>
+     <width>1456</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCMD">

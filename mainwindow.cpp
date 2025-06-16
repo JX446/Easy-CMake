@@ -19,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->clearButton, &QPushButton::clicked, this, &MainWindow::handle_clearButton_clicked);
     connect(this, &MainWindow::directorySelect, ui->dirtreeView, &MyTreeView::loadDirectory);
     connect(ui->outputFileDirPushButton, &QPushButton::clicked, this, &MainWindow::handle_outputFileDirPushButton_clicked);
+    connect(ui->addMacroPushButton, &QPushButton::clicked, this, &MainWindow::handle_addMacroPushButton_clicked);
+    connect(ui->deleteMacroPushButton, &QPushButton::clicked, this, &MainWindow::handle_deleteMacroPushButton_clicked);
 
     // 自动更新设置
     connect(ui->projectNameLineEdit, &QLineEdit::editingFinished, this, [&]() {
@@ -120,6 +122,48 @@ void MainWindow::handle_outputFileDirPushButton_clicked()
     generator->setExeFileOutput(dir);
 }
 
+void MainWindow::handle_addMacroPushButton_clicked()
+{
+    QString macroName = ui->addMacroLineEdit->text().trimmed();
+    if (!macroName.isEmpty()) {
+        // 检查重复
+        bool exists = false;
+        for (int i = 0; i < ui->macroListWidget->count(); ++i) {
+            if (ui->macroListWidget->item(i)->text() == macroName) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            ui->macroListWidget->addItem(macroName);
+            ui->addMacroLineEdit->clear();
+        } else {
+            QMessageBox::warning(this, "重复宏", "该宏已存在！");
+            ui->addMacroLineEdit->clear();
+        }
+    }
+    QStringList macroList;
+    for (int i = 0; i < ui->macroListWidget->count(); ++i) {
+        macroList << ui->macroListWidget->item(i)->text();
+    }
+    generator->setMacroList(macroList);
+
+}
+
+void MainWindow::handle_deleteMacroPushButton_clicked()
+{
+    auto selectedItems = ui->macroListWidget->selectedItems();
+    for (int i = 0; i < selectedItems.size(); ++i) {
+        auto item = selectedItems.at(i);
+        delete ui->macroListWidget->takeItem(ui->macroListWidget->row(item));
+    }
+    QStringList macroList;
+    for (int i = 0; i < ui->macroListWidget->count(); ++i) {
+        macroList << ui->macroListWidget->item(i)->text();
+    }
+    generator->setMacroList(macroList);
+}
+
 void MainWindow::updateGeneratorSettings()
 {
     generator->setProjectPath(ui->showDirlineEdit->text());
@@ -131,4 +175,11 @@ void MainWindow::updateGeneratorSettings()
     generator->setCxxVersionRequired(ui->cxxVersionComboBox->currentText());
     generator->setCxxVersionOption(ui->cxxVersionOptionComboBox->currentText() == "ENFORCED");
     generator->setExeFileOutput(ui->outputFileDirLineEdit->text());
+
+    QStringList macroList;
+    for (int i = 0; i < ui->macroListWidget->count(); ++i) {
+        macroList << ui->macroListWidget->item(i)->text();
+    }
+    generator->setMacroList(macroList);
+
 }
