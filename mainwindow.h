@@ -37,6 +37,8 @@ private slots:
     bool handle_saveButton_clicked();
     void handle_clearButton_clicked();
     void handle_outputFileDirPushButton_clicked();
+    void handle_addMacroPushButton_clicked();
+    void handle_deleteMacroPushButton_clicked();
 
 
 signals:
