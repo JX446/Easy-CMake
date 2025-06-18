@@ -112,43 +112,83 @@ QString CMakeGenerator::collectHeadFiles(const QStringList &files) const {
 QString CMakeGenerator::generateCMakeContent(const QStringList &files) const {
     QStringList lines;
 
-    lines << QString("cmake_minimum_required(VERSION %1)\n").arg(m_versionRequired);
-    lines << QString("project(%1 LANGUAGES CXX)\n").arg(m_projectName);
-    lines << QString("set(CMAKE_CXX_STANDARD %1)\n").arg(m_cxxVersion);
+    lines << QString("# CMake 最低版本要求")
+          << QString("cmake_minimum_required(VERSION %1)\n").arg(m_versionRequired);
+
+    lines << QString("# 项目信息")
+          << QString("project(%1 LANGUAGES CXX)\n").arg(m_projectName);
+
+    lines << QString("# 设置 C++ 标准")
+          << QString("set(CMAKE_CXX_STANDARD %1)\n").arg(m_cxxVersion);
+
     if (m_cxxVersion_option) {
-        lines << "set(CMAKE_CXX_STANDARD_REQUIRED ON)\n";
+        lines << "# 启用强制要求 C++ 标准"
+              << "set(CMAKE_CXX_STANDARD_REQUIRED ON)\n";
     }
 
     if (!m_macroList.isEmpty()) {
+        lines << "# 宏定义列表";
         for (int i = 0; i < m_macroList.count(); ++i) {
-            QString marco = m_macroList.at(i);
-            lines << QString("add_definitions(-D%1)\n").arg(marco);
+            QString macro = m_macroList.at(i);
+            lines << QString("add_definitions(-D%1)\n").arg(macro);
         }
     }
+
+    // 可选的 Qt 自动功能
     // lines << "set(CMAKE_AUTOMOC ON)\n";
     // lines << "set(CMAKE_AUTOUIC ON)\n";
     // lines << "set(CMAKE_AUTORCC ON)\n";
     // lines << "find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)\n";
 
+    // 源文件
+    lines << "# 源文件列表";
     QString sourceFiles = collectSourceFiles(files);
     lines << sourceFiles;
+
+    // 头文件
+    lines << "# 头文件列表";
     QString headFiles = collectHeadFiles(files);
     lines << headFiles;
-    // 输出文件类型
+
+    // 头文件包含目录
+    QSet<QString> uniqueIncludeDirs;
+    for (const QString &file : files) {
+        if (file.endsWith(".h", Qt::CaseInsensitive) || file.endsWith(".hpp", Qt::CaseInsensitive)) {
+            QFileInfo info(file);
+            QString absDirPath = info.absolutePath();
+            QString relDirPath = QDir(m_projectPath).relativeFilePath(absDirPath);
+            if (!relDirPath.isEmpty()) {
+                uniqueIncludeDirs.insert(relDirPath.replace("\\", "/"));
+            }
+        }
+    }
+
+    if (!uniqueIncludeDirs.isEmpty()) {
+        lines << "# 头文件包含目录";
+        for (const QString &dir : uniqueIncludeDirs) {
+            lines << QString("include_directories(${CMAKE_CURRENT_SOURCE_DIR}/%1)\n").arg(dir);
+        }
+    }
+
+    // 输出文件类型（可执行/静态库/动态库等）
+    lines << "# 设置输出目标";
     if (m_outputFileType == "ExeFile") {
         lines << QString("add_executable(%1 ${SOURCES} ${HEADERS})\n").arg(m_exeFileName);
     } else if (m_outputFileType == "StaticLib") {
         lines << QString("add_library(%1 STATIC ${SOURCES} ${HEADERS})\n").arg(m_exeFileName);
     } else if (m_outputFileType == "DynamicLib") {
         lines << QString("add_library(%1 SHARED ${SOURCES} ${HEADERS})\n").arg(m_exeFileName);
-    } else if(m_outputFileType == "InterfaceLib") {
+    } else if (m_outputFileType == "InterfaceLib") {
         lines << QString("add_library(%1 INTERFACE ${SOURCES} ${HEADERS})\n").arg(m_exeFileName);
     }
+
+    lines << "# 编译选项";
     lines << QString("target_compile_options(%1 %2 -Wall -g)\n").arg(m_exeFileName, m_exeFileScope);
-    // lines << QString("include_directories(%1 {HEAD_FILES})\n").arg(m_exeFileName);
+
+    lines << "# 设置可执行文件输出路径";
     lines << QString("set(EXECUTABLE_OUTPUT_PATH %1)\n").arg(m_exeFileOutput);
 
-    // 将返回结果从qstringlist变成qstring
+    // 合并所有内容为字符串返回
     return lines.join("\n");
 }
 
