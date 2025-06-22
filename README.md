@@ -5,8 +5,6 @@
 
 <p align="center">🛠️ 一款可视化生成 CMakeLists.txt 的轻量工具 | A lightweight visual tool for generating CMakeLists.txt</p>
 
-# Quick CMakeLists.txt GUI Generator 快速生成CMakeLists.txt的GUI程序
-
 ## 简介 Introduction
 
 这是一个基于Qt的轻量级GUI工具，帮助用户快速自动生成符合项目结构的`CMakeLists.txt`文件，支持设置项目名称、编译选项、版本要求等，极大简化手动编写CMake脚本的繁琐工作。
