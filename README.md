@@ -37,7 +37,7 @@ A lightweight Qt-based GUI tool to quickly generate `CMakeLists.txt` files match
 2. 配置项目名称、CMake版本、语言标准等参数  
 3. 点击生成按钮，即可快速获得符合规范的`CMakeLists.txt`  
 4. 将生成文件放置到项目根目录，使用CMake进行编译即可
-
+<!-- break -->
 1. Launch the application and select the project root directory  
 2. Configure project name, CMake version, language standard, and other settings  
 3. Click the generate button to quickly produce a compliant `CMakeLists.txt` file  
