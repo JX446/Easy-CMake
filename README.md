@@ -1,6 +1,4 @@
-# Quick CMakeLists.txt GUI Generator 快速生成CMakeLists.txt的GUI程序
-
-<img src="icon.png" alt="Icon" width="120">
+# <img src="icon.png" alt="Icon" width="120">Quick CMakeLists.txt GUI Generator 快速生成CMakeLists.txt的GUI程序
 
 ## 简介 Introduction
 
