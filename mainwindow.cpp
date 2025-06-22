@@ -21,13 +21,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->outputFileDirPushButton, &QPushButton::clicked, this, &MainWindow::handle_outputFileDirPushButton_clicked);
     connect(ui->addMacroPushButton, &QPushButton::clicked, this, &MainWindow::handle_addMacroPushButton_clicked);
     connect(ui->deleteMacroPushButton, &QPushButton::clicked, this, &MainWindow::handle_deleteMacroPushButton_clicked);
+    connect(ui->buildPushButton, &QPushButton::clicked, this, &MainWindow::handle_buildPushButton_clicked);
 
     // 自动更新设置
     connect(ui->projectNameLineEdit, &QLineEdit::editingFinished, this, [&]() {
         generator->setProjectName(ui->projectNameLineEdit->text());
     });
     connect(ui->minimumVersionLineEdit, &QLineEdit::editingFinished, this, [&]() {
-        generator->setVersionRequired(ui->minimumVersionLineEdit->text());
+        generator->setCMakeVersionRequired(ui->minimumVersionLineEdit->text());
     });
     connect(ui->outputFileNameLineEdit, &QLineEdit::editingFinished, this, [&]() {
         generator->setExeFileName(ui->outputFileNameLineEdit->text());
@@ -38,12 +39,27 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->outputFileTypeOptionComboBox, &QComboBox::currentTextChanged, this, [&](const QString &text) {
         generator->setOutputFileType(text);
     });
-    connect(ui->cxxVersionComboBox, &QComboBox::currentTextChanged, this, [&](const QString &text) {
-        generator->setCxxVersionRequired(text);
+    connect(ui->languageVersionComboBox, &QComboBox::currentTextChanged, this, [&](const QString &text) {
+        generator->setLanguageVersionRequired(text);
     });
-    connect(ui->cxxVersionOptionComboBox, &QComboBox::currentTextChanged, this, [&](const QString &text) {
-        generator->setCxxVersionOption(text == "ENFORCED");
+    connect(ui->languageVersionOptionComboBox, &QComboBox::currentTextChanged, this, [&](const QString &text) {
+        generator->setLanguageVersionRequiredStrict(text == "ENFORCED");
     });
+    connect(ui->languageChooseComboBox, &QComboBox::currentTextChanged, this, [&](const QString &text) {
+        generator->setLanguage(text);
+    });
+    connect(ui->languageChooseComboBox, &QComboBox::currentTextChanged, this, [&](const QString &text) {
+        ui->languageVersionComboBox->clear();
+        if (text == "C") {
+            ui->languageVersionComboBox->addItems({"C89", "C99", "C11", "C17"});
+            ui->languageVersionComboBox->setCurrentIndex(2);
+        } else {
+            ui->languageVersionComboBox->addItems({"C++98", "C++03", "C++11", "C++14", "C++17", "C++20", "C++23"});
+            ui->languageVersionComboBox->setCurrentIndex(2);
+        }
+    });
+    emit ui->languageVersionComboBox->currentTextChanged(ui->languageChooseComboBox->currentText());
+
 
     // 鼠标悬停输出目录时输出完整内容
     connect(ui->outputFileDirLineEdit, &QLineEdit::textChanged, this, [=](const QString &text) {
@@ -57,6 +73,28 @@ MainWindow::MainWindow(QWidget *parent)
             ui->outputFileDirLineEdit->setToolTip(""); // 文本没超出，取消 tooltip
         }
     });
+
+    // 输出监控
+    connect(&cmakeProcess, &QProcess::readyReadStandardOutput, this, [&]() {
+        ui->buildLogTextEdit->append(QString::fromLocal8Bit(cmakeProcess.readAllStandardOutput()));
+    });
+
+    connect(&cmakeProcess, &QProcess::readyReadStandardError, this, [&]() {
+        ui->buildLogTextEdit->append(QString::fromLocal8Bit(cmakeProcess.readAllStandardError()));
+    });
+
+    // 结束后重置进度条
+    connect(&cmakeProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            this, [=](int exitCode, QProcess::ExitStatus status) {
+                ui->buildProgressBar->setRange(0, 100);
+                ui->buildProgressBar->setValue(100);
+
+                if (exitCode == 0 && status == QProcess::NormalExit) {
+                    ui->buildLogTextEdit->append("✅ 构建配置完成！");
+                } else {
+                    ui->buildLogTextEdit->append("❌ 构建失败！");
+                }
+            });
 }
 
 MainWindow::~MainWindow()
@@ -92,6 +130,8 @@ bool MainWindow::handle_saveButton_clicked()
         QMessageBox::critical(this, "错误", "请先生成CMake文件！");
         return false;
     }
+
+    handle_genButton_clicked();
 
     QString rootpath = ui->showDirlineEdit->text();
     QString cmakecontent = ui->cmakePlainTextEdit->toPlainText();
@@ -164,17 +204,51 @@ void MainWindow::handle_deleteMacroPushButton_clicked()
     generator->setMacroList(macroList);
 }
 
+void MainWindow::handle_buildPushButton_clicked()
+{
+    if (ui->showDirlineEdit->text().isEmpty()) {
+        QMessageBox::critical(this, "错误", "请先选择一个文件目录！");
+        return;
+    }
+
+    handle_saveButton_clicked();
+
+    ui->buildLogTextEdit->clear();
+
+    QString basePath = ui->outputFileDirLineEdit->text();
+    QString buildPath = basePath + "/build";
+
+    // 如果 buildPath 存在，整个删掉
+    QDir buildDir(buildPath);
+    if (buildDir.exists()) {
+        buildDir.removeRecursively();
+    }
+    // 重新创建 build 目录
+    QDir().mkpath(buildPath);
+
+    // 设置工作目录
+    cmakeProcess.setWorkingDirectory(buildPath);
+
+    // 启动 cmake 配置命令
+    cmakeProcess.start("cmake", QStringList() << basePath);  // 如果 CMakeLists.txt 在 basePath 下
+
+    // 设置为“忙碌状态”的进度条（不确定进度）
+    ui->buildProgressBar->setRange(0, 0);
+
+}
+
 void MainWindow::updateGeneratorSettings()
 {
     generator->setProjectPath(ui->showDirlineEdit->text());
     generator->setProjectName(ui->projectNameLineEdit->text());
-    generator->setVersionRequired(ui->minimumVersionLineEdit->text());
+    generator->setCMakeVersionRequired(ui->minimumVersionLineEdit->text());
     generator->setExeFileName(ui->outputFileNameLineEdit->text());
     generator->setExeFileScope(ui->exeFileScopeComboBox->currentText());
     generator->setOutputFileType(ui->outputFileTypeOptionComboBox->currentText());
-    generator->setCxxVersionRequired(ui->cxxVersionComboBox->currentText());
-    generator->setCxxVersionOption(ui->cxxVersionOptionComboBox->currentText() == "ENFORCED");
+    generator->setLanguageVersionRequired(ui->languageVersionComboBox->currentText());
+    generator->setLanguageVersionRequiredStrict(ui->languageVersionOptionComboBox->currentText() == "ENFORCED");
     generator->setExeFileOutput(ui->outputFileDirLineEdit->text());
+    generator->setLanguage(ui->languageChooseComboBox->currentText());
 
     QStringList macroList;
     for (int i = 0; i < ui->macroListWidget->count(); ++i) {

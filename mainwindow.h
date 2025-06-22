@@ -29,6 +29,8 @@ private:
     Ui::MainWindow *ui;
     std::unique_ptr<CMakeGenerator> generator;
     void updateGeneratorSettings();
+    QProcess cmakeProcess;
+    QProcess buildProcess;
 
 private slots:
 
@@ -39,6 +41,7 @@ private slots:
     void handle_outputFileDirPushButton_clicked();
     void handle_addMacroPushButton_clicked();
     void handle_deleteMacroPushButton_clicked();
+    void handle_buildPushButton_clicked();
 
 
 signals:

@@ -19,16 +19,23 @@ void CMakeGenerator::setProjectPath(const QString &path) {
     m_projectPath = path;
 }
 
-void CMakeGenerator::setVersionRequired(const QString &version) {
-    m_versionRequired = version;
+void CMakeGenerator::setCMakeVersionRequired(const QString &version) {
+    m_cmakeVersionRequired = version;
 }
 
-void CMakeGenerator::setCxxVersionRequired(const QString &CXXversion) {
-    m_cxxVersion = CXXversion;
+void CMakeGenerator::setLanguageVersionRequired(const QString &version) {
+    if (version.startsWith("C++")) {
+        m_languageVersionRequired = version;
+        m_languageVersionRequired.replace("C++", "CXX");
+    } else if (version.startsWith("C")) {
+        m_languageVersionRequired = version.mid(1);  // 更语义化的方式：跳过第一个字符
+    } else {
+        m_languageVersionRequired = version;  // fallback 情况，避免未赋值
+    }
 }
 
-void CMakeGenerator::setCxxVersionOption(bool option) {
-    m_cxxVersion_option = option;
+void CMakeGenerator::setLanguageVersionRequiredStrict(bool strict) {
+    m_languageVersionRequiredStrict = strict;
 }
 
 void CMakeGenerator::setExeFileScope(const QString &scope) {
@@ -45,6 +52,14 @@ void CMakeGenerator::setOutputFileType(const QString &outputFileType) {
 
 void CMakeGenerator::setMacroList(const QStringList &macroList) {
     m_macroList = macroList;
+}
+
+void CMakeGenerator::setLanguage(const QString &language) {
+    if (language == "C") {
+        m_language = "C";
+    } else {
+        m_language = "CXX";
+    }
 }
 
 // 收集源文件
@@ -79,7 +94,7 @@ QString CMakeGenerator::collectSourceFiles(const QStringList &files) const {
 }
 
 // 收集头文件
-QString CMakeGenerator::collectHeadFiles(const QStringList &files) const {
+QString CMakeGenerator::collectHeaderFiles(const QStringList &files) const {
     qDebug() << "rootpath:" << m_projectPath;
     QStringList result;
     result << "set(HEADERS";
@@ -113,17 +128,17 @@ QString CMakeGenerator::generateCMakeContent(const QStringList &files) const {
     QStringList lines;
 
     lines << QString("# CMake 最低版本要求")
-          << QString("cmake_minimum_required(VERSION %1)\n").arg(m_versionRequired);
+          << QString("cmake_minimum_required(VERSION %1)\n").arg(m_cmakeVersionRequired);
 
     lines << QString("# 项目信息")
-          << QString("project(%1 LANGUAGES CXX)\n").arg(m_projectName);
+          << QString("project(%1 LANGUAGES %2)\n").arg(m_projectName, m_language);
 
-    lines << QString("# 设置 C++ 标准")
-          << QString("set(CMAKE_CXX_STANDARD %1)\n").arg(m_cxxVersion);
+    lines << QString("# 设置语言版本标准")
+          << QString("set(CMAKE_%1_STANDARD %2)\n").arg(m_language, m_languageVersionRequired);
 
-    if (m_cxxVersion_option) {
-        lines << "# 启用强制要求 C++ 标准"
-              << "set(CMAKE_CXX_STANDARD_REQUIRED ON)\n";
+    if (m_languageVersionRequiredStrict) {
+        lines << "# 启用强制要求语言版本标准"
+              << QString("set(CMAKE_%1_STANDARD_REQUIRED ON)\n").arg(m_language);
     }
 
     if (!m_macroList.isEmpty()) {
@@ -147,7 +162,7 @@ QString CMakeGenerator::generateCMakeContent(const QStringList &files) const {
 
     // 头文件
     lines << "# 头文件列表";
-    QString headFiles = collectHeadFiles(files);
+    QString headFiles = collectHeaderFiles(files);
     lines << headFiles;
 
     // 头文件包含目录
