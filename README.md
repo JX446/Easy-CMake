@@ -1,4 +1,10 @@
-# <img src="icon.png" alt="Icon" width="120"> Easy-CMake
+<h1 align="center">
+  <img src="icon.png" alt="Icon" width="80" style="vertical-align:middle; margin-right:10px;">
+  Easy-CMake
+</h1>
+
+<p align="center">🛠️ 一款可视化生成 CMakeLists.txt 的轻量工具 | A lightweight visual tool for generating CMakeLists.txt</p>
+
 # Quick CMakeLists.txt GUI Generator 快速生成CMakeLists.txt的GUI程序
 
 ## 简介 Introduction
