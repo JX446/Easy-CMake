@@ -62,6 +62,28 @@ void CMakeGenerator::setLanguage(const QString &language) {
     }
 }
 
+void CMakeGenerator::addLinkLibrary(const QString &libName, const QString &scope, const QString &type) {
+    LinkLibrary lib;
+    lib.name = libName;
+    lib.scope = scope.toUpper();
+    if (type == "STATIC") {
+        m_linkStaticLibraries.append(lib);
+    } else {
+        m_linkDynamicLibraries.append(lib);
+    }
+}
+
+void CMakeGenerator::deleteLinkLibrary(const QString &libName, const QString &scope, const QString &type) {
+    if (type == "STATIC") {
+        for (int i = 0; i < m_linkStaticLibraries.count(); i++) {
+            if (libName == m_linkStaticLibraries[i].name && scope == m_linkStaticLibraries[i].scope) {
+                m_linkStaticLibraries.removeAt(i);
+                break;
+            }
+        }
+    }
+}
+
 // 收集源文件
 QString CMakeGenerator::collectSourceFiles(const QStringList &files) const {
     qDebug() << "rootpath:" << m_projectPath;
@@ -124,6 +146,7 @@ QString CMakeGenerator::collectHeaderFiles(const QStringList &files) const {
     return result.join("\n");
 }
 
+// 主体CMake内容生成
 QString CMakeGenerator::generateCMakeContent(const QStringList &files) const {
     QStringList lines;
 
@@ -185,6 +208,16 @@ QString CMakeGenerator::generateCMakeContent(const QStringList &files) const {
         }
     }
 
+    // 链接静态库
+    if (!m_linkStaticLibraries.isEmpty()) {
+        lines << "# 链接静态库";
+        lines << "link_libraries(";
+        for (int i = 0; i < m_linkStaticLibraries.count(); i++) {
+            lines << QString("    %1 %2").arg(m_linkStaticLibraries[i].scope, m_linkStaticLibraries[i].name);
+        }
+        lines << ")\n";
+    }
+
     // 输出文件类型（可执行/静态库/动态库等）
     lines << "# 设置输出目标";
     if (m_outputFileType == "ExeFile") {
@@ -203,7 +236,17 @@ QString CMakeGenerator::generateCMakeContent(const QStringList &files) const {
     lines << "# 设置可执行文件输出路径";
     lines << QString("set(EXECUTABLE_OUTPUT_PATH %1)\n").arg(m_exeFileOutput);
 
-    // 合并所有内容为字符串返回
+    // 链接动态库
+    if (!m_linkDynamicLibraries.isEmpty()) {
+        lines << "# 链接动态库";
+        lines << QString("target_link_libraries(%1").arg(m_exeFileName);
+        for (int i = 0; i < m_linkDynamicLibraries.count(); i++) {
+            lines << QString("    %1 %2").arg(m_linkDynamicLibraries[i].scope, m_linkDynamicLibraries[i].name);
+        }
+        lines << ")\n";
+    }
+
+    // 合并所有内容为QString返回
     return lines.join("\n");
 }
 

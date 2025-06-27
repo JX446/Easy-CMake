@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->addMacroPushButton, &QPushButton::clicked, this, &MainWindow::handle_addMacroPushButton_clicked);
     connect(ui->deleteMacroPushButton, &QPushButton::clicked, this, &MainWindow::handle_deleteMacroPushButton_clicked);
     connect(ui->buildPushButton, &QPushButton::clicked, this, &MainWindow::handle_buildPushButton_clicked);
+    connect(ui->addLinkLibraryPushButton, &QPushButton::clicked, this, &MainWindow::handle_addLinkLibraryPushButton_clicked);
+    connect(ui->deleteLinkLibraryPushButton, &QPushButton::clicked, this, &MainWindow::handle_deleteLinkLibraryPushButton_clicked);
+
 
     // 自动更新设置
     connect(ui->projectNameLineEdit, &QLineEdit::editingFinished, this, [&]() {
@@ -202,6 +205,46 @@ void MainWindow::handle_deleteMacroPushButton_clicked()
         macroList << ui->macroListWidget->item(i)->text();
     }
     generator->setMacroList(macroList);
+}
+
+void MainWindow::handle_addLinkLibraryPushButton_clicked()
+{
+    QString libName = ui->addLinkLibraryLineEdit->text().trimmed();
+    QString libScope = ui->linkLibraryScopeComboBox->currentText();
+    QString libType = ui->linkLibraryTypeComboBox->currentText();
+    if (!libName.isEmpty()) {
+        // 检查重复
+        bool exists = false;
+        for (int i = 0; i < ui->linkLibraryListWidget->count(); ++i) {
+            QString libText = ui->linkLibraryListWidget->item(i)->text();
+            QStringList parts = libText.split(' ', Qt::SkipEmptyParts);
+            if (libName == parts[0] && libScope == parts[1] && libType == parts[2]) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            QString itemText = QString("%1 %2 %3").arg(libName.leftJustified(40), libScope.leftJustified(10), libType);
+            ui->linkLibraryListWidget->addItem(itemText);
+            ui->addLinkLibraryLineEdit->clear();
+            generator->addLinkLibrary(libName, libScope, libType);
+        } else {
+            QMessageBox::warning(this, "重复库", "该库已存在！");
+            ui->addLinkLibraryLineEdit->clear();
+        }
+    }
+}
+
+void MainWindow::handle_deleteLinkLibraryPushButton_clicked()
+{
+    auto selectedItems = ui->linkLibraryListWidget->selectedItems();
+    for (int i = 0; i < selectedItems.size(); ++i) {
+        auto item = selectedItems.at(i);
+        QString libText = item->text();
+        QStringList parts = libText.split(' ', Qt::SkipEmptyParts);
+        generator->deleteLinkLibrary(parts[0], parts[1], parts[2]);
+        delete ui->linkLibraryListWidget->takeItem(ui->linkLibraryListWidget->row(item));
+    }
 }
 
 void MainWindow::handle_buildPushButton_clicked()
