@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
+// #include <QMap>
 
 class CMakeGenerator : public QObject {
     Q_OBJECT
@@ -27,12 +28,24 @@ public:
     void setLanguageVersionRequired(const QString &version);           // 如 "14"
     void setLanguageVersionRequiredStrict(bool strict);                // 是否严格启用标准
     void setMacroList(const QStringList &macroList);                   // 宏定义
+    void addLinkLibrary(const QString &libName,
+                        const QString &scope,
+                        const QString &type);
+    void deleteLinkLibrary(const QString &libName,
+                           const QString &scope,
+                           const QString &type);
 
     // === 核心生成函数 ===
     QString generateCMakeContent(const QStringList &files) const;
-    bool generate(const QString &cmakeContent);  // 写入 CMakeLists.txt
+    bool generate(const QString &cmakeContent);                        // 写入 CMakeLists.txt
 
 private:
+    // === 自定义结构体 ===
+    struct LinkLibrary {
+        QString name;       // 库名，例如 Qt6::Widgets
+        QString scope;      // PUBLIC / PRIVATE / INTERFACE
+    };
+
     // === 配置参数 ===
     QString m_projectName              = "default_projectname";
     QString m_projectPath;
@@ -46,6 +59,8 @@ private:
     QString m_exeFileOutput            = "${CMAKE_CURRENT_SOURCE_DIR}/build";
     QString m_outputFileType           = "ExeFile";
     QStringList m_macroList;
+    QList<LinkLibrary> m_linkStaticLibraries;
+    QList<LinkLibrary> m_linkDynamicLibraries;
 
     // === 文件处理工具函数 ===
     QString collectSourceFiles(const QStringList &files) const;

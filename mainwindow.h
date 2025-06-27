@@ -42,7 +42,8 @@ private slots:
     void handle_addMacroPushButton_clicked();
     void handle_deleteMacroPushButton_clicked();
     void handle_buildPushButton_clicked();
-
+    void handle_addLinkLibraryPushButton_clicked();
+    void handle_deleteLinkLibraryPushButton_clicked();
 
 signals:
     void directorySelect(const QString &path);
