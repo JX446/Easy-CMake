@@ -5,7 +5,7 @@ MyTreeView::MyTreeView(QWidget *parent)
 {
     setAcceptDrops(true);
     setDropIndicatorShown(true);
-    setDragDropMode(QAbstractItemView::DropOnly);
+    // setDragDropMode(QAbstractItemView::DropOnly);
 
     model = new CheckableFileSystemModel(this);  // 初始化模型
     QStringList filters;
@@ -39,6 +39,11 @@ void MyTreeView::dropEvent(QDropEvent *event) {
 }
 
 void MyTreeView::loadDirectory(const QString &path) {
+    // 为空直接返回
+    if (path.isEmpty()) {
+        return;
+    }
+
     model->setRootPath(path);
     model->setHeaderData(0, Qt::Horizontal, path);
 
